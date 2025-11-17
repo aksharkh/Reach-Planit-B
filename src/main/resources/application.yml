@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:planit}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:root}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+
+jwt:
+  secret: ${JWT_SECRET:IAMAKSHRKHIAMAKSHARKHIAMAKSHARKH1234988765IAMakshar}
+  expirationMs: 900000
+  refreshExpirationMs: 604800000
+
+cors:
+  allowed-origins:
+    - http://localhost:5173
+
