@@ -19,10 +19,11 @@ public class JwtUtils {
     private long jwtExpirationMs;
 
     private Key getKey() {
+
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
 
-    public String generateAccessToken(String subject){
+    public String generateJwtToken(String subject){
         Date now = new Date();
         Date exp = new Date(now.getTime() + jwtExpirationMs);
 
@@ -32,6 +33,29 @@ public class JwtUtils {
                 .setExpiration(exp)
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(getKey())
+                    .build()
+                    .parseClaimsJwt(token);
+
+            return  true;
+        } catch (JwtException e) {
+            return false;
+        }
+    }
+
+    public String getEmailFromToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject();
     }
 
 }

@@ -20,7 +20,8 @@ public class User {
 
     private String password;
 
-    private String name;
+    @Column(name = "user_name")
+    private String userName;
 
     @Column(length = 50)
     private String provider;

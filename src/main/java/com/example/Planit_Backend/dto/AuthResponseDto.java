@@ -8,7 +8,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class AuthResponseDto {
 
-    private String accessToken;
-    private String refreshToken;
+    private String jwtToken;
+//    private String refreshToken;
     private String tokenType = "Bearer";
 }
