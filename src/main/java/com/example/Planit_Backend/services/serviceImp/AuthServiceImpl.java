@@ -8,7 +8,9 @@ import com.example.Planit_Backend.entity.User;
 import com.example.Planit_Backend.exceptions.EmailAlreadyExistsException;
 import com.example.Planit_Backend.repository.UserRepository;
 import com.example.Planit_Backend.services.service.AuthService;
+import com.example.Planit_Backend.utils.GoogleTokenVerifier;
 import com.example.Planit_Backend.utils.JwtUtils;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +25,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
     private final ModelMapper modelMapper;
+    private final GoogleTokenVerifier googleTokenVerifier;
 
 
     @Override
@@ -58,12 +61,30 @@ public class AuthServiceImpl implements AuthService {
 
     }
 
-//    @Override
-//    public AuthResponseDto googleLogin(String idToken){
-//
-//        String email = verifyGoo
-//
-//    }
+    @Override
+    public String loginWithGoogle(String idToken) {
+
+        GoogleIdToken.Payload payload = googleTokenVerifier.verify(idToken);
+
+        if(payload == null) {
+            throw new RuntimeException("Invalid Google ID token");
+        }
+
+        String email = payload.getEmail();
+        String name = (String) payload.get("name");
+
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        if(user == null) {
+            user = new User();
+            user.setEmail(email);
+            user.setUserName(name);
+            user.setProvider("GOOGLE");
+            userRepository.save(user);
+        }
+
+        return jwtUtils.generateJwtToken(email);
+    }
 
 
 }

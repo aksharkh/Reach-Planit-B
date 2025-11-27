@@ -21,6 +21,9 @@ jwt:
   expirationMs: 900000
   refreshExpirationMs: 604800000
 
+google:
+  clientId: 954694610792-od254vr5ae61nh9buf0bo309mk4oo7eu.apps.googleusercontent.com
+
 cors:
   allowed-origins:
     - http://localhost:5173
