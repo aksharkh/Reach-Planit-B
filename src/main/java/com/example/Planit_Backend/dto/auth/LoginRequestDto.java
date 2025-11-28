@@ -1,4 +1,4 @@
-package com.example.Planit_Backend.dto;
+package com.example.Planit_Backend.dto.auth;
 
 
 import lombok.Data;

@@ -1,9 +1,8 @@
 package com.example.Planit_Backend.services.service;
 
-import com.example.Planit_Backend.dto.LoginRequestDto;
-import com.example.Planit_Backend.dto.AuthResponseDto;
-import com.example.Planit_Backend.dto.RegisterRequestDto;
-import com.example.Planit_Backend.dto.UserDto;
+import com.example.Planit_Backend.dto.auth.LoginRequestDto;
+import com.example.Planit_Backend.dto.auth.AuthResponseDto;
+import com.example.Planit_Backend.dto.auth.RegisterRequestDto;
 
 public interface AuthService {
 

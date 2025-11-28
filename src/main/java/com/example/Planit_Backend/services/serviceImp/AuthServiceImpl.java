@@ -1,9 +1,8 @@
 package com.example.Planit_Backend.services.serviceImp;
 
-import com.example.Planit_Backend.dto.LoginRequestDto;
-import com.example.Planit_Backend.dto.AuthResponseDto;
-import com.example.Planit_Backend.dto.RegisterRequestDto;
-import com.example.Planit_Backend.dto.UserDto;
+import com.example.Planit_Backend.dto.auth.LoginRequestDto;
+import com.example.Planit_Backend.dto.auth.AuthResponseDto;
+import com.example.Planit_Backend.dto.auth.RegisterRequestDto;
 import com.example.Planit_Backend.entity.User;
 import com.example.Planit_Backend.exceptions.EmailAlreadyExistsException;
 import com.example.Planit_Backend.repository.UserRepository;

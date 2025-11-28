@@ -1,10 +1,10 @@
 package com.example.Planit_Backend.controller;
 
 
-import com.example.Planit_Backend.dto.GoogleLoginDto;
-import com.example.Planit_Backend.dto.LoginRequestDto;
-import com.example.Planit_Backend.dto.AuthResponseDto;
-import com.example.Planit_Backend.dto.RegisterRequestDto;
+import com.example.Planit_Backend.dto.auth.GoogleLoginDto;
+import com.example.Planit_Backend.dto.auth.LoginRequestDto;
+import com.example.Planit_Backend.dto.auth.AuthResponseDto;
+import com.example.Planit_Backend.dto.auth.RegisterRequestDto;
 import com.example.Planit_Backend.services.service.AuthService;
 import com.example.Planit_Backend.utils.GoogleTokenVerifier;
 import com.example.Planit_Backend.utils.JwtUtils;
