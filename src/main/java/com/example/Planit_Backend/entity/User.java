@@ -26,6 +26,9 @@ public class User {
     @Column(length = 50)
     private String provider;
 
+    private String role;
+    private String planType;
+
     private Instant createdAt = Instant.now();
     private Instant updatedAt = Instant.now();
 

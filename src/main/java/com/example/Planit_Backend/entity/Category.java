@@ -22,4 +22,9 @@ public class Category {
     private String iconCode;
     private  boolean isFeatured;
 
+
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    private User user;
+
 }
