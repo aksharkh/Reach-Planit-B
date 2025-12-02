@@ -22,6 +22,9 @@ public class Event {
 
     private String title;
     private String description;
+    private String eventType;
+    private String milestone;
+    private String status;
 
     @Column(name = "event_date")
     private LocalDateTime eventDate;
@@ -35,6 +38,10 @@ public class Event {
     @JoinColumn(name = "category_id")
     private Category category;
 
+
+    @ManyToOne
+    @JoinColumn(name = "family_member_id")
+    private FamilyMember familyMember;
 
 
 }
