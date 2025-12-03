@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -22,7 +22,7 @@ public class FamilyMember {
 
     private String name;
     private String relation;
-    private LocalDateTime dob;
+    private LocalDate dob;
     private String gender;
 
     @ElementCollection

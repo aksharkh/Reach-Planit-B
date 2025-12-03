@@ -11,6 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class FamilyMembersServiceImpl implements FamilyMembersService {
@@ -20,9 +26,20 @@ public class FamilyMembersServiceImpl implements FamilyMembersService {
     private final FamilyMembersRepository familyMembersRepository;
     private final ModelMapper modelMapper;
 
+
+    private FamilyMemberResponse mapToResponse(FamilyMember member) {
+        FamilyMemberResponse res = modelMapper.map(member, FamilyMemberResponse.class);
+
+        if(member.getDob()!= null) {
+            res.setAge(Period.between(member.getDob(), LocalDate.now()).getYears());
+        }
+
+        return res;
+    }
+
     @Override
-    public FamilyMemberResponse addMember(FamilyMemberRequestDto request){
-        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
+    public FamilyMemberResponse addMember(Long userId, FamilyMemberRequestDto request){
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
 
         FamilyMember member = new FamilyMember();
@@ -40,8 +57,37 @@ public class FamilyMembersServiceImpl implements FamilyMembersService {
     }
 
 
-//    @Override
-//    public FamilyMemberResponse getMembers(Long userId){
-//
-//    }
+    @Override
+    public List<FamilyMemberResponse> getMembers(Long userId){
+        List<FamilyMember> members = familyMembersRepository.findByUserId(userId);
+
+        return  members.stream().map(this::mapToResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public FamilyMemberResponse updateMember(Long userId, Long memberId, FamilyMemberRequestDto request){
+        FamilyMember member = familyMembersRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
+
+        if(!member.getUser().getId().equals(userId)){
+            throw new RuntimeException("You are not allowed to delete the member");
+        }
+
+        modelMapper.map(request, member);
+
+        FamilyMember updated = familyMembersRepository.save(member);
+
+        return mapToResponse(updated);
+    }
+
+
+    @Override
+    public void deleteMember(Long userId, Long memberId) {
+        FamilyMember member = familyMembersRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
+
+        if(!member.getUser().getId().equals(userId)) {
+            throw new RuntimeException("You are not allowed to delete this member");
+        }
+
+        familyMembersRepository.delete(member);
+    }
 }
