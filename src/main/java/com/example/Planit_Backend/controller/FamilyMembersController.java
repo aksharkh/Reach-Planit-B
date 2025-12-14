@@ -38,4 +38,9 @@ public class FamilyMembersController {
         familyMembersService.deleteMember(userId, memberId);
         return  ResponseEntity.ok("member deleted");
     }
+
+    @GetMapping("/{userId}/{memberId}")
+    public ResponseEntity<FamilyMemberResponse> getSingleMember(@PathVariable Long userId, @PathVariable Long memberId){
+        return ResponseEntity.ok(familyMembersService.getSingleMember(userId, memberId));
+    }
 }

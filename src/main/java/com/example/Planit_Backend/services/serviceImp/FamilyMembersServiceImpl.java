@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,7 +61,7 @@ public class FamilyMembersServiceImpl implements FamilyMembersService {
     @Override
     public List<FamilyMemberResponse> getMembers(Long userId){
         List<FamilyMember> members = familyMembersRepository.findByUserId(userId);
-
+        members.sort(Comparator.comparing(FamilyMember::getId));
         return  members.stream().map(this::mapToResponse).collect(Collectors.toList());
     }
 
@@ -89,5 +90,19 @@ public class FamilyMembersServiceImpl implements FamilyMembersService {
         }
 
         familyMembersRepository.delete(member);
+    }
+
+
+
+    @Override
+    public FamilyMemberResponse getSingleMember(Long userId, Long memberId){
+        FamilyMember member = familyMembersRepository.findById(memberId).orElseThrow(() -> new RuntimeException("member not found"));
+
+        if(!member.getUser().getId().equals(userId)) {
+            throw new RuntimeException("you are not allowed to see this member");
+        }
+
+        return modelMapper.map(member, FamilyMemberResponse.class);
+
     }
 }

@@ -12,5 +12,7 @@ public interface FamilyMembersService {
     FamilyMemberResponse updateMember(Long userId, Long memberId, FamilyMemberRequestDto request);
     void deleteMember(Long userId, Long memberId);
 
+    FamilyMemberResponse getSingleMember(Long userId, Long memberId);
+
 
 }
