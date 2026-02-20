@@ -40,25 +40,29 @@ public class DashboardServiceImpl implements DashboardService {
             User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
             response.setUserProfile(modelMapper.map(user, UserDto.class));
 
-            List<Event> upcomingEvents = eventRepository.findByUserIdAndEventDateAfterOrderByEventDateAsc(userId, LocalDateTime.now());
+            List<Event> upcomingEvents = eventRepository.findByUserIdAndEventDateAfterOrderByEventDateAsc(userId, LocalDate.now());
 
             if(!upcomingEvents.isEmpty()) {
                 Event nearestEvent = upcomingEvents.get(0);
                 EventDto eventDto = modelMapper.map(nearestEvent, EventDto.class);
 
 
-                Duration diff = Duration.between(LocalDateTime.now(), nearestEvent.getEventDate());
+                LocalDateTime reminderTime = nearestEvent.getEventDate().atStartOfDay();
+                Duration diff = Duration.between(LocalDateTime.now(), reminderTime);
+
                 eventDto.setDaysLeft(diff.toDays());
                 eventDto.setHoursLeft(diff.toHours() % 24);
                 eventDto.setMinutesLeft(diff.toMinutes() % 60);
 
+
                 response.setUpcomingEvent(eventDto);
             }
 
-            LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
-            LocalDateTime endOfDay = LocalDate.now().atTime(23, 59, 59);
-            Long todayCount = eventRepository.countEventsForDay(userId, startOfDay, endOfDay);
+            Long todayCount =
+                    eventRepository.countByUserIdAndEventDate(userId, LocalDate.now());
+
             response.setEventsTodayCount(todayCount);
+
 
             List<ShoppingStat> stats = shoppingStatRepository.findByUserId(userId);
             List<ShoppingStatDto> statDtos = stats.stream()

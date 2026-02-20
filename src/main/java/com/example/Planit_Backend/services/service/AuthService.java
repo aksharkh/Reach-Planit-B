@@ -8,6 +8,6 @@ public interface AuthService {
 
     AuthResponseDto login(LoginRequestDto requestDto);
     AuthResponseDto register(RegisterRequestDto requestDto);
-//    AuthResponseDto googleLogin(String idToken);
     String loginWithGoogle(String idToken);
+    String loginWithApple(String identityToken);
 }

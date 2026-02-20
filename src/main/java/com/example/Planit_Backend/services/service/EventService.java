@@ -5,7 +5,18 @@ import com.example.Planit_Backend.dto.requestDtos.EventRequestDto;
 
 public interface EventService {
 
-    EventDto createEvent(EventRequestDto request);
-    EventDto updateEvent(Long evntId, EventRequestDto request);
+    EventDto createEvent(Long id,EventRequestDto request);
+    EventDto getEventDetails(Long userId, Long eventId);
+    EventDto updateEvent(Long eventId, EventRequestDto request);
     void deleteEvent(Long eventId);
 }
+
+
+//userId: number;
+//categoryId: number;
+//memberId: number;
+//eventDate: string;
+//description: string;
+//milestoneType: string;
+//customMilestone?: string | null;
+

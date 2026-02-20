@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,14 +21,19 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
     private String description;
-    private String eventType;
-    private String milestone;
-    private String status;
+//    private String eventType;
+    private String milestoneType;
+    private String status = "pending";
+    private String customMilestone;
 
     @Column(name = "event_date")
-    private LocalDateTime eventDate;
+    private LocalDate eventDate;
+
+//    @Column(name = "reminder_at")
+//    private LocalDateTime reminderAt;
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

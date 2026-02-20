@@ -8,6 +8,7 @@ import com.example.Planit_Backend.exceptions.EmailAlreadyExistsException;
 import com.example.Planit_Backend.repository.UserRepository;
 import com.example.Planit_Backend.services.service.AuthService;
 import com.example.Planit_Backend.utils.GoogleTokenVerifier;
+import com.example.Planit_Backend.utils.AppleTokenVerifier;
 import com.example.Planit_Backend.utils.JwtUtils;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtils jwtUtils;
     private final ModelMapper modelMapper;
     private final GoogleTokenVerifier googleTokenVerifier;
+    private final AppleTokenVerifier appleTokenVerifier;
 
 
     @Override
@@ -85,5 +87,27 @@ public class AuthServiceImpl implements AuthService {
         return jwtUtils.generateJwtToken(email);
     }
 
+    @Override
+    public String loginWithApple(String identityToken) {
 
+        AppleTokenVerifier.AppleTokenPayload payload = appleTokenVerifier.verify(identityToken);
+
+        if(payload == null) {
+            throw new RuntimeException("Invalid Apple ID token");
+        }
+
+        String email = payload.email;
+
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        if(user == null) {
+            user = new User();
+            user.setEmail(email);
+            user.setUserName(email.split("@")[0]); // Use part of email as username
+            user.setProvider("APPLE");
+            userRepository.save(user);
+        }
+
+        return jwtUtils.generateJwtToken(email);
+    }
 }
